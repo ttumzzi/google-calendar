@@ -1,0 +1,35 @@
+.month-controller {
+  align-items: center;
+  min-width: 250px;
+
+  .today-btn {
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    width: 40px;
+    background-color: white;
+    border: 0.5px solid grey;
+    font-size: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 8px;
+  }
+
+  .month-move-btns {
+    & > * {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .date-display {
+    margin-left: 20px;
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}

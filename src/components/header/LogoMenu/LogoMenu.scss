@@ -1,0 +1,30 @@
+.logo-menu {
+  width: 250px;
+  .menu {
+    width: 60px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .logo {
+    align-items: center;
+
+    .logo-image {
+      width: 40px;
+      padding-right: 5px;
+      img {
+        width: 100%;
+      }
+    }
+    .logo-text {
+      font-size: 20px;
+      cursor: default;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .logo-menu {
+    display: none;
+  }
+}
