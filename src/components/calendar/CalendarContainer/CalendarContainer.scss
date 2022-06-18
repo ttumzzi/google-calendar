@@ -1,0 +1,12 @@
+.calendar-container {
+  width: 240px;
+  min-width: 240px;
+  height: 100%;
+  padding: 20px;
+  display: block;
+
+  .calendar-header {
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+}

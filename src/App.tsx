@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import CalendarContainer from "./components/calendar/CalendarContainer/CalendarContainer";
 import HeaderContainer from "./components/header/HeaderContainer/HeaderContainer";
 import WeelyContainer from "./components/weekly/WeelyContainer/WeelyContainer";

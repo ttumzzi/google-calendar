@@ -15,3 +15,18 @@ export const currentDateState = atom<number>({
   key: "currentDateState",
   default: getCurrentDate(),
 });
+
+export const calendarYearState = atom<number>({
+  key: "calendarYearState",
+  default: getCurrentYear(),
+});
+
+export const calendarMonthState = atom<number>({
+  key: "calendarMonthState",
+  default: getCurrentMonth(),
+});
+
+export const calendarDateState = atom<number>({
+  key: "calendarDateState",
+  default: getCurrentDate(),
+});

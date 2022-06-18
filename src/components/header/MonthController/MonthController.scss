@@ -15,21 +15,11 @@
     margin: 8px;
   }
 
-  .month-move-btns {
-    & > * {
-      margin-left: 10px;
-      cursor: pointer;
-    }
+  .month-move-container {
+    margin: 10px;
   }
 
-  .date-display {
-    margin-left: 20px;
-    cursor: default;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  .year-month-container {
+    margin: 10px;
   }
 }

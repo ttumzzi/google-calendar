@@ -1,0 +1,9 @@
+.month-move-btns {
+  & * {
+    cursor: pointer;
+  }
+
+  & > *:first-child {
+    margin-right: 10px;
+  }
+}
