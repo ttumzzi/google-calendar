@@ -1,0 +1,25 @@
+@import "../../../assets/style/colors.scss";
+@import "../../../assets/style/size.scss";
+
+$border: 0.5px solid $light-gray;
+
+.schedules {
+  .schedule {
+    box-sizing: border-box;
+    font-size: 8px;
+    padding: 5px;
+    position: absolute;
+    min-height: $timeblock-height;
+    width: calc(100% - 10px);
+    height: 20px;
+    background-color: lighten($unfocused-color, 50%);
+    left: -0.5px;
+    border-radius: 5px;
+    flex-direction: column;
+    border: 0.5px solid #fff;
+
+    & > div {
+      display: inline-block;
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { selector } from "recoil";
+import { DAYS_OF_WEEK } from "../const/date.const";
 import {
   getPrevMonthDates,
   getDateLength,
@@ -8,7 +9,11 @@ import {
   getNextMonthYear,
   getNextMonth,
 } from "../utils/date";
-import { calendarMonthState, calendarYearState } from "./atom";
+import {
+  calendarDateState,
+  calendarMonthState,
+  calendarYearState,
+} from "./atom";
 
 export const calendarDateListState = selector({
   key: "calendarDateListState",
@@ -42,5 +47,29 @@ export const calendarDateListState = selector({
       ...currentMonthInDateFormat,
       ...nextMonthInDateFormat,
     ];
+  },
+});
+
+export const weekDateListState = selector({
+  key: "weekDateListState",
+  get: ({ get }) => {
+    const calendarYear = get(calendarYearState);
+    const calendarMonth = get(calendarMonthState);
+    const calendarDate = get(calendarDateState);
+    const dateList = get(calendarDateListState);
+
+    const index = dateList.findIndex(
+      ({ year, month, date }) =>
+        year === calendarYear &&
+        month === calendarMonth &&
+        date === calendarDate
+    );
+
+    if (index === -1) {
+      throw new Error("invalid datelist");
+    }
+
+    const startIndex = index - (index % DAYS_OF_WEEK);
+    return dateList.slice(startIndex, startIndex + DAYS_OF_WEEK);
   },
 });

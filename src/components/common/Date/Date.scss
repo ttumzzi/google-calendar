@@ -1,0 +1,36 @@
+@import "../../../assets/style/colors.scss";
+
+.date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  clip-path: circle(45%);
+
+  &:hover {
+    clip-path: circle(45%);
+    background-color: lighten($unfocused-color, 50%);
+  }
+
+  &.bold {
+    color: $text-color;
+    font-weight: 600;
+  }
+
+  &.today {
+    color: white;
+    background-color: $primary-color;
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  &.active {
+    color: $primary-color;
+    background-color: $active-date-color;
+    &:hover {
+      background-color: darken($active-date-color, 10%);
+    }
+  }
+}

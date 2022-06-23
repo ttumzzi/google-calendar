@@ -1,4 +1,8 @@
-import { CALENDAR_DATE_LENGTH, IS_SATRT_WITH_MONDAY } from "../const/date";
+import {
+  CALENDAR_DATE_LENGTH,
+  DAY_LIST,
+  IS_SATRT_WITH_MONDAY,
+} from "../const/date.const";
 
 export const getCurrentYear = () => {
   return new Date().getFullYear();
@@ -10,6 +14,11 @@ export const getCurrentMonth = () => {
 
 export const getCurrentDate = () => {
   return new Date().getDate();
+};
+
+export const getDayString = (year: number, month: number, date: number) => {
+  const day = new Date(`${year}.${month}.${date}`).getDay();
+  return DAY_LIST[day];
 };
 
 export const getDaysString = () => {
@@ -66,4 +75,28 @@ export const getPrevMonthDates = (year: number, month: number) => {
 export const getNextMonthDates = (currentDateLength: number) => {
   const leftDays = CALENDAR_DATE_LENGTH - currentDateLength;
   return Array.from({ length: leftDays }, (_, i) => i + 1);
+};
+
+const _getTimeToString = (time: number) => {
+  const hour = Math.floor(time);
+  const minute = (time - hour) * 60;
+
+  const timeText = hour > 12 ? "오후" : "오전";
+  const formatedHour = hour > 12 ? hour - 12 : hour;
+  const formatedTimeSign = minute === 0 ? "시" : ":";
+  const formatedMinute = minute === 0 ? "" : String(minute).padStart(2, "0");
+
+  return `${timeText} ${formatedHour}${formatedTimeSign}${formatedMinute}`;
+};
+
+export const getTimeFormat = (
+  prevTime: number,
+  nextTime: number,
+  isLineBreaking: boolean
+) => {
+  if (!isLineBreaking) {
+    return `, ${_getTimeToString(prevTime)}`;
+  }
+
+  return `${_getTimeToString(prevTime)} ~ ${_getTimeToString(nextTime)}`;
 };

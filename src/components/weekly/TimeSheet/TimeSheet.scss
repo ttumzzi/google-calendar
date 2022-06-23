@@ -1,0 +1,26 @@
+@import "../../../assets/style/colors.scss";
+@import "../../../assets/style/size.scss";
+
+$border: 0.5px solid $light-gray;
+
+.time-sheet {
+  flex-direction: column;
+  width: 100%;
+
+  .time-block {
+    cursor: pointer;
+    height: $timeblock-height;
+
+    &:first-child {
+      border-top: $border;
+    }
+
+    &:nth-child(4n) {
+      border-bottom: $border;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

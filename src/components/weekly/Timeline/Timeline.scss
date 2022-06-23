@@ -1,0 +1,38 @@
+@import "../../../assets/style/colors.scss";
+@import "../../../assets/style/size.scss";
+
+$transparent-border: 0.5px solid transparent;
+$border: 0.5px solid $light-gray;
+
+.timeline {
+  min-width: 75px;
+  width: 75px;
+  margin-top: 70.5px;
+  flex-direction: column;
+
+  .time-display {
+    position: relative;
+    height: calc($timeblock-height * 4);
+    border-bottom: $transparent-border;
+
+    &:last-child .time-display-text {
+      display: none;
+    }
+
+    .time-display-mark {
+      position: absolute;
+      width: 8px;
+      right: 0;
+      border-bottom: $border;
+    }
+
+    .time-display-text {
+      z-index: 1000;
+      font-size: 8px;
+      position: absolute;
+      color: $light-gray;
+      top: calc($timeblock-height * 4 - 5px);
+      right: 16px;
+    }
+  }
+}
