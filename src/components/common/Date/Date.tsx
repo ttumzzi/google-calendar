@@ -1,13 +1,10 @@
 import React from "react";
 import "./Date.scss";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   calendarDateState,
   calendarMonthState,
   calendarYearState,
-  currentDateState,
-  currentMonthState,
-  currentYearState,
 } from "../../../recoil/date.atom";
 import classNames from "classnames";
 import { isToday } from "../../../utils/date";
@@ -19,9 +16,6 @@ const Date: React.FC<Props> = ({ year, month, date }: Props) => {
   const [calendarYear, setCalendarYear] = useRecoilState(calendarYearState);
   const [calendarMonth, setCalendarMonth] = useRecoilState(calendarMonthState);
   const [calendarDate, setCalendarDate] = useRecoilState(calendarDateState);
-  const setCurrentYear = useSetRecoilState(currentYearState);
-  const setCurrentMonth = useSetRecoilState(currentMonthState);
-  const setCurrentDate = useSetRecoilState(currentDateState);
 
   const isActive = () => {
     return (
@@ -36,9 +30,6 @@ const Date: React.FC<Props> = ({ year, month, date }: Props) => {
     setCalendarYear(year);
     setCalendarMonth(month);
     setCalendarDate(date);
-    setCurrentYear(year);
-    setCurrentMonth(month);
-    setCurrentDate(date);
   };
 
   return (
