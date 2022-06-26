@@ -24,20 +24,26 @@ import {
 } from "../../../recoil/date.atom";
 
 export interface Props extends IDateInfo {
+  isEditing: boolean;
   closeModal: () => void;
   id: string;
+  title: string;
 }
 
 const ScheduleModal: React.FC<Props> = (props: Props) => {
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>(props.title);
   const [repeatOption, setRepeatOption] = useState<TRepeatOption>("NO_REPEAT");
   const setSchedules = useSetRecoilState(schedulesState);
   const [scheduleItems, setScheduleItems] = useRecoilState(scheduleItemsState);
   const setDailyRepeated = useSetRecoilState(dailyRepeatedState);
   const setWeeklyRepeated = useSetRecoilState(weeklyRepeatedState);
   const setYearlyRepeated = useSetRecoilState(yearlyRepeatedState);
+  const [isEditing, setEditing] = useState<boolean>(props.isEditing);
 
   const { year, month, date, id, closeModal } = props;
+  if (!scheduleItems[id]) {
+    return <></>;
+  }
   const { startTime, endTime } = scheduleItems[id];
   const dayIndex = getDayIndex(year, month, date);
   const dayString = `${getDayString(year, month, date)}요일`;
@@ -51,7 +57,7 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
     setRepeatOption(event.target.value as TRepeatOption);
   };
 
-  const handleRemove = () => {
+  const removeSchedule = () => {
     setScheduleItems((prev: IScheduleItems) => {
       const newScheduleItems = { ...prev };
       delete newScheduleItems[id];
@@ -69,7 +75,45 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
       if (index !== -1) currentDateSchedules.splice(index, 1);
       return { ...newScheduls, [dateKey]: currentDateSchedules };
     });
+  };
+
+  const handleClose = () => {
     closeModal();
+    if (!props.isEditing) return;
+    removeSchedule();
+  };
+
+  const handleRemove = () => {
+    // eslint-disable-next-line no-restricted-globals
+    const isRemoving = confirm(
+      "일정을 삭제할까요? (반복일정은 함께 삭제됩니다.)"
+    );
+    if (!isRemoving) return;
+
+    removeSchedule();
+
+    setDailyRepeated((prev) => prev.filter((scheduleId) => scheduleId !== id));
+    setWeeklyRepeated((prev) => {
+      const newSchedules = [...prev];
+      newSchedules[dayIndex] =
+        newSchedules[dayIndex]?.filter(
+          (scheduleId: string) => scheduleId !== id
+        ) || [];
+      return newSchedules;
+    });
+    setYearlyRepeated((prev) => {
+      const newSchedules = { ...prev };
+      newSchedules[`${month}/${date}`] =
+        newSchedules[`${month}/${date}`]?.filter(
+          (scheduleId: string) => scheduleId !== id
+        ) || [];
+      return newSchedules;
+    });
+    closeModal();
+  };
+
+  const handleEdit = () => {
+    setEditing(true);
   };
 
   const handleSave = () => {
@@ -111,7 +155,7 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
   return (
     <div className="schedule-modal">
       <div className="header">
-        <div className="close-button" onClick={handleRemove}>
+        <div className="close-button" onClick={handleClose}>
           <FaTimes />
         </div>
       </div>
@@ -121,13 +165,17 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
             type="text"
             placeholder="제목 추가"
             onChange={handleChangeTitle}
+            readOnly={!isEditing}
+            value={title}
           />
         </div>
-        <div className="detail-type-select">
-          <button className="detail-type-btn">이벤트</button>
-          <button disabled>할 일</button>
-          <button disabled>알림</button>
-        </div>
+        {isEditing && (
+          <div className="detail-type-select">
+            <button className="detail-type-btn">이벤트</button>
+            <button disabled>할 일</button>
+            <button disabled>알림</button>
+          </div>
+        )}
         <div className="detail-items">
           <div className="time">
             <div className="time-icon icon">
@@ -138,7 +186,7 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
                 {month}월 {date}일({dayString}){"  "}
                 {getTimeFormat(startTime, endTime, true)}
               </div>
-              <select onChange={handleChangeRepeatOption}>
+              <select onChange={handleChangeRepeatOption} disabled={!isEditing}>
                 <option value="NO_REPEAT">반복 안함</option>
                 <option value="EVERYDAY">매일</option>
                 <option value="WEEK">매주 {dayString}</option>
@@ -152,10 +200,23 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
       </div>
 
       <div className="footer">
-        <button disabled>옵션 더보기</button>
-        <button className="primary" onClick={handleSave}>
-          저장
-        </button>
+        {isEditing ? (
+          <>
+            <button disabled>옵션 더보기</button>
+            <button className="primary" onClick={handleSave}>
+              저장
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="primary" onClick={handleEdit}>
+              수정
+            </button>
+            <button className="warning" onClick={handleRemove}>
+              삭제
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

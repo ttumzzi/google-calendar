@@ -12,6 +12,8 @@ import "./Schedules.scss";
 import variables from "../../../assets/style/size.scss";
 import { getDayIndex, getTimeFormat } from "../../../utils/date";
 import dayjs from "dayjs";
+import useModal from "../../../hooks/useModal";
+import ScheduleModal from "../../modal/ScheduleModal/ScheduleModal";
 
 export interface Props {
   dateKey: string;
@@ -23,6 +25,7 @@ const Schedules: React.FC<Props> = ({ dateKey }: Props) => {
   const { timeBlockHeight } = variables;
   const schedulePointerEvent = useRecoilValue(schedulePointerEventState);
   const [schedules, setSchedules] = useState(totalSchedules[dateKey] || []);
+  const { getModalId, openModal, closeModal } = useModal();
 
   const dailyRepeated = useRecoilValue(dailyRepeatedState);
   const weeklyRepeated = useRecoilValue(weeklyRepeatedState);
@@ -39,6 +42,19 @@ const Schedules: React.FC<Props> = ({ dateKey }: Props) => {
         `${item.year}-${item.month}-${item.date}`
       );
     });
+  };
+
+  const handleClick = (id: string) => {
+    const scheduleItem = scheduleItems[id];
+    const modalId = getModalId();
+    const props = {
+      ...scheduleItem,
+      id,
+      closeModal: closeModal.bind(null, modalId),
+      isEditing: false,
+    };
+    const component = <ScheduleModal {...props} />;
+    openModal(modalId, component);
   };
 
   useEffect(() => {
@@ -88,6 +104,7 @@ const Schedules: React.FC<Props> = ({ dateKey }: Props) => {
               display: isLineBreaking ? "flex" : "inline-block",
             }}
             data-id={id}
+            onClick={handleClick.bind(null, id)}
           >
             <div className="title">{title}</div>
             <div className="time">

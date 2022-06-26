@@ -83,6 +83,8 @@ const useTimeBlockMove = ({ year, month, date }: IDateInfo) => {
       date,
       id: id.current,
       closeModal: closeModal.bind(null, modalId),
+      isEditing: true,
+      title: "",
     };
     const component = <ScheduleModal {...props} />;
     openModal(modalId, component);
