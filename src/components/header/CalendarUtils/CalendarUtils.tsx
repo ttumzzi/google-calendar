@@ -10,16 +10,16 @@ export interface Props {}
 const CalendarUtils: React.FC<Props> = (props: Props) => {
   return (
     <div className="calendar-utils">
-      <div className="search">
+      <div className="search preparing">
         <HiOutlineSearch fontSize={20} />
       </div>
-      <div className="info">
+      <div className="info preparing">
         <AiOutlineInfoCircle fontSize={20} />
       </div>
-      <div className="setting">
+      <div className="setting preparing">
         <IoSettingsOutline fontSize={20} />
       </div>
-      <div className="select-type">
+      <div className="select-type preparing">
         <div className="text">주</div>
         <div className="dropdown">
           <MdArrowDropDown />

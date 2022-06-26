@@ -8,7 +8,7 @@ export interface Props {}
 const LogoMenu: React.FC<Props> = (props: Props) => {
   return (
     <div className="logo-menu">
-      <div className="menu">
+      <div className="menu preparing">
         <VscMenu fontSize={20} />
       </div>
       <div className="logo">

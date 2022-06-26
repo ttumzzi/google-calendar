@@ -2,4 +2,9 @@
   width: 100%;
   display: block;
   position: relative;
+
+  .preparing,
+  .preparing > * {
+    cursor: not-allowed;
+  }
 }
