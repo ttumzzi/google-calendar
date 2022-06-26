@@ -13,6 +13,7 @@ import {
   ISchedules,
 } from "../interface/date.interface";
 import { getDateKey } from "../utils/date";
+import { EMPTY_TITLE } from "../const/calendar.const";
 
 const useTimeBlockMove = ({ year, month, date }: IDateInfo) => {
   const [isMoving, setMoving] = useState(false);
@@ -32,7 +33,7 @@ const useTimeBlockMove = ({ year, month, date }: IDateInfo) => {
       newScheduleItems[id.current] = {
         startTime: startTime.current,
         endTime: endTime.current,
-        title: "(제목없음)",
+        title: EMPTY_TITLE,
         year,
         month,
         date,

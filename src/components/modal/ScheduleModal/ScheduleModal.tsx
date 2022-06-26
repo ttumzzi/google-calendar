@@ -40,6 +40,7 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
   const setYearlyRepeated = useSetRecoilState(yearlyRepeatedState);
   const [isEditing, setEditing] = useState<boolean>(props.isEditing);
 
+  console.log(document.scrollingElement?.scrollTop);
   const { year, month, date, id, closeModal } = props;
   if (!scheduleItems[id]) {
     return <></>;
@@ -153,7 +154,13 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div className="schedule-modal">
+    <div
+      className="schedule-modal"
+      style={{
+        top: `calc(${document.scrollingElement?.scrollTop}px + 380px)`,
+        left: "20px",
+      }}
+    >
       <div className="header">
         <div className="close-button" onClick={handleClose}>
           <FaTimes />
