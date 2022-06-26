@@ -5,12 +5,15 @@ export interface IDateInfo {
 }
 
 export interface ISchedule {
-  id: string;
   startTime: number;
   endTime: number;
   title: string;
 }
 
 export interface ISchedules {
-  [key: string]: ISchedule[];
+  [key: string]: string[];
+}
+
+export interface IScheduleItems {
+  [key: string]: ISchedule & IDateInfo;
 }

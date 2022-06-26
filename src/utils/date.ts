@@ -3,6 +3,7 @@ import {
   DAY_LIST,
   IS_SATRT_WITH_MONDAY,
 } from "../const/date.const";
+import { IScheduleItems } from "../interface/date.interface";
 
 export const getCurrentYear = () => {
   return new Date().getFullYear();
@@ -16,8 +17,12 @@ export const getCurrentDate = () => {
   return new Date().getDate();
 };
 
+export const getDayIndex = (year: number, month: number, date: number) => {
+  return new Date(`${year}.${month}.${date}`).getDay();
+};
+
 export const getDayString = (year: number, month: number, date: number) => {
-  const day = new Date(`${year}.${month}.${date}`).getDay();
+  const day = getDayIndex(year, month, date);
   return DAY_LIST[day];
 };
 
@@ -56,7 +61,7 @@ export const getNextMonth = (month: number) => {
 };
 
 export const getPrevMonthDates = (year: number, month: number) => {
-  const firstDateDay = new Date(`${year}.${month}.01`).getDay();
+  const firstDateDay = getDayIndex(year, month, 1);
   const leftDays = IS_SATRT_WITH_MONDAY
     ? firstDateDay === 0
       ? 6

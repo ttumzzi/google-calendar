@@ -1,14 +1,23 @@
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { schedulePointerEventState, schedulesState } from "../recoil/date.atom";
+import {
+  scheduleItemsState,
+  schedulePointerEventState,
+  schedulesState,
+} from "../recoil/date.atom";
 import useModal from "./useModal";
 import ScheduleModal from "../components/modal/ScheduleModal/ScheduleModal";
-import { IDateInfo, ISchedule } from "../interface/date.interface";
+import {
+  IDateInfo,
+  IScheduleItems,
+  ISchedules,
+} from "../interface/date.interface";
 import { getDateKey } from "../utils/date";
 
 const useTimeBlockMove = ({ year, month, date }: IDateInfo) => {
   const [isMoving, setMoving] = useState(false);
   const setSchedules = useSetRecoilState(schedulesState);
+  const setScheduleItems = useSetRecoilState(scheduleItemsState);
   const id = useRef<string>("");
   const startTime = useRef<number>(0);
   const endTime = useRef<number>(0);
@@ -18,28 +27,28 @@ const useTimeBlockMove = ({ year, month, date }: IDateInfo) => {
   const dateKey = getDateKey(year, month, date);
 
   const setNewSchedule = useCallback(() => {
-    setSchedules((prev) => {
-      const currentDateSchedules = prev[dateKey] || [];
-      const index = currentDateSchedules.findIndex(
-        (schedule) => schedule.id === id.current
-      );
-
-      let newSchedules: ISchedule[];
-      const newSchedule: ISchedule = {
-        id: id.current,
+    setScheduleItems((scheduleItems: IScheduleItems) => {
+      const newScheduleItems = { ...scheduleItems };
+      newScheduleItems[id.current] = {
         startTime: startTime.current,
         endTime: endTime.current,
         title: "(제목없음)",
+        year,
+        month,
+        date,
       };
 
-      if (index === -1) {
-        newSchedules = [...currentDateSchedules, newSchedule];
-      } else {
-        newSchedules = [...currentDateSchedules];
-        newSchedules[index] = newSchedule;
-      }
+      return newScheduleItems;
+    });
 
-      return { ...prev, [dateKey]: newSchedules };
+    setSchedules((schedules: ISchedules) => {
+      const newSchedules = { ...schedules };
+      const currentDateSchedules = newSchedules[dateKey] || [];
+
+      if (!currentDateSchedules?.includes(id.current)) {
+        newSchedules[dateKey] = [...currentDateSchedules, id.current];
+      }
+      return newSchedules;
     });
   }, [dateKey, setSchedules]);
 
@@ -73,13 +82,9 @@ const useTimeBlockMove = ({ year, month, date }: IDateInfo) => {
       month,
       date,
       id: id.current,
-      startTime: startTime.current,
-      endTime: endTime.current,
-      title: "",
+      closeModal: closeModal.bind(null, modalId),
     };
-    const component = (
-      <ScheduleModal {...props} closeModal={closeModal.bind(null, modalId)} />
-    );
+    const component = <ScheduleModal {...props} />;
     openModal(modalId, component);
   }, []);
 

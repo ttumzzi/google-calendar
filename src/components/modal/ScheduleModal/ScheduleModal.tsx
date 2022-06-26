@@ -1,25 +1,47 @@
 import React, { ChangeEvent, useState } from "react";
 import "./ScheduleModal.scss";
 import { FaTimes } from "react-icons/fa";
-import { IDateInfo, ISchedule } from "../../../interface/date.interface";
-import { getDateKey, getDayString, getTimeFormat } from "../../../utils/date";
+import {
+  IDateInfo,
+  IScheduleItems,
+  ISchedules,
+} from "../../../interface/date.interface";
+import {
+  getDateKey,
+  getDayIndex,
+  getDayString,
+  getTimeFormat,
+} from "../../../utils/date";
 import { BiTimeFive } from "react-icons/bi";
 import { TRepeatOption } from "../../../type/date.type";
-import { useRecoilState } from "recoil";
-import { schedulesState } from "../../../recoil/date.atom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  dailyRepeatedState,
+  scheduleItemsState,
+  schedulesState,
+  weeklyRepeatedState,
+  yearlyRepeatedState,
+} from "../../../recoil/date.atom";
 
-export interface Props extends ISchedule, IDateInfo {
+export interface Props extends IDateInfo {
   closeModal: () => void;
+  id: string;
 }
 
 const ScheduleModal: React.FC<Props> = (props: Props) => {
-  const { year, month, date, startTime, endTime, id, closeModal } = props;
-  const day = `${getDayString(year, month, date)}요일`;
-  const dateKey = getDateKey(year, month, date);
-
   const [title, setTitle] = useState<string>("");
   const [repeatOption, setRepeatOption] = useState<TRepeatOption>("NO_REPEAT");
-  const [schedules, setSchedules] = useRecoilState(schedulesState);
+  const setSchedules = useSetRecoilState(schedulesState);
+  const [scheduleItems, setScheduleItems] = useRecoilState(scheduleItemsState);
+  const setDailyRepeated = useSetRecoilState(dailyRepeatedState);
+  const setWeeklyRepeated = useSetRecoilState(weeklyRepeatedState);
+  const setYearlyRepeated = useSetRecoilState(yearlyRepeatedState);
+
+  const { year, month, date, id, closeModal } = props;
+  const { startTime, endTime } = scheduleItems[id];
+  const dayIndex = getDayIndex(year, month, date);
+  const dayString = `${getDayString(year, month, date)}요일`;
+  const dateKey = getDateKey(year, month, date);
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -30,24 +52,59 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
   };
 
   const handleRemove = () => {
-    const currentDateSchedules = [...schedules[dateKey]] || [];
-    const index = currentDateSchedules.findIndex(
-      (schedule) => schedule.id === id
-    );
-    if (index !== -1) currentDateSchedules.splice(index, 1);
-    setSchedules({ ...schedules, [dateKey]: currentDateSchedules });
+    setScheduleItems((prev: IScheduleItems) => {
+      const newScheduleItems = { ...prev };
+      delete newScheduleItems[id];
+      return newScheduleItems;
+    });
+
+    setSchedules((prev: ISchedules) => {
+      const newScheduls = { ...prev };
+      const currentDateSchedules = [...prev[dateKey]] || [];
+
+      const index = currentDateSchedules.findIndex(
+        (scheduleId) => scheduleId === id
+      );
+
+      if (index !== -1) currentDateSchedules.splice(index, 1);
+      return { ...newScheduls, [dateKey]: currentDateSchedules };
+    });
     closeModal();
   };
 
   const handleSave = () => {
-    const currentDateSchedules = schedules[dateKey] || [];
-    const index = currentDateSchedules.findIndex(
-      (schedule) => schedule.id === id
-    );
-    const newSchedules = [...currentDateSchedules];
-    newSchedules[index] = { id, startTime, endTime, title };
+    setScheduleItems((prev: IScheduleItems) => {
+      const newScheduleItems = { ...prev };
+      newScheduleItems[id] = {
+        ...newScheduleItems[id],
+        title,
+      };
+      return newScheduleItems;
+    });
 
-    setSchedules({ ...schedules, [dateKey]: newSchedules });
+    switch (repeatOption) {
+      case "EVERYDAY":
+        setDailyRepeated((prev) => [...prev, id]);
+        break;
+      case "WEEK":
+        setWeeklyRepeated((prev) => {
+          const currentWeekly = [...prev];
+          currentWeekly[dayIndex] = [...(currentWeekly[dayIndex] || []), id];
+          return currentWeekly;
+        });
+        break;
+      case "YEAR":
+        setYearlyRepeated((prev) => {
+          const currentYearly = { ...prev };
+          currentYearly[`${month}/${date}`] = [
+            ...(currentYearly[`${month}/${date}`] || []),
+            id,
+          ];
+          return currentYearly;
+        });
+        break;
+    }
+
     closeModal();
   };
 
@@ -78,13 +135,13 @@ const ScheduleModal: React.FC<Props> = (props: Props) => {
             </div>
             <div className="time-detail">
               <div>
-                {month}월 {date}일({day}){"  "}
+                {month}월 {date}일({dayString}){"  "}
                 {getTimeFormat(startTime, endTime, true)}
               </div>
               <select onChange={handleChangeRepeatOption}>
                 <option value="NO_REPEAT">반복 안함</option>
                 <option value="EVERYDAY">매일</option>
-                <option value="WEEK">매주 {day}</option>
+                <option value="WEEK">매주 {dayString}</option>
                 <option value="YEAR">
                   매년 {month}월 {date}일
                 </option>
