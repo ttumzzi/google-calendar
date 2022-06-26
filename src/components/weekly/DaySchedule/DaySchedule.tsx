@@ -1,5 +1,5 @@
 import React from "react";
-import { IDateInfo } from "../../../interface/interfaces";
+import { IDateInfo } from "../../../interface/date.interface";
 import { getDayString } from "../../../utils/date";
 import Date from "../../common/Date/Date";
 import TimeTable from "../TimeTable/TimeTable";

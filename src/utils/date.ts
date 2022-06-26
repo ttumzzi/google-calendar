@@ -100,3 +100,7 @@ export const getTimeFormat = (
 
   return `${_getTimeToString(prevTime)} ~ ${_getTimeToString(nextTime)}`;
 };
+
+export const getDateKey = (year: number, month: number, date: number) => {
+  return `${year}/${month}/${date}`;
+};

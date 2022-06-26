@@ -8,10 +8,10 @@ import {
   currentDateState,
   currentMonthState,
   currentYearState,
-} from "../../../recoil/atom";
+} from "../../../recoil/date.atom";
 import classNames from "classnames";
 import { isToday } from "../../../utils/date";
-import { IDateInfo } from "../../../interface/interfaces";
+import { IDateInfo } from "../../../interface/date.interface";
 
 export interface Props extends IDateInfo {}
 

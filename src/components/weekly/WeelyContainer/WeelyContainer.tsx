@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { IDateInfo } from "../../../interface/interfaces";
-import { weekDateListState } from "../../../recoil/selector";
+import { IDateInfo } from "../../../interface/date.interface";
+import { weekDateListState } from "../../../recoil/date.selector";
 import DaySchedule from "../DaySchedule/DaySchedule";
 import Timeline from "../Timeline/Timeline";
 import "./WeelyContainer.scss";

@@ -1,10 +1,10 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { ISchedule } from "../../../interface/interfaces";
+import { ISchedule } from "../../../interface/date.interface";
 import {
   schedulePointerEventState,
   schedulesState,
-} from "../../../recoil/atom";
+} from "../../../recoil/date.atom";
 import "./Schedules.scss";
 import variables from "../../../assets/style/size.scss";
 import { getTimeFormat } from "../../../utils/date";

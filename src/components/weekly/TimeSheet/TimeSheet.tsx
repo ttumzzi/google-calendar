@@ -1,13 +1,13 @@
+import { uniqueId } from "lodash";
 import React from "react";
 import useTimeBlockMove from "../../../hooks/useTimeBlockMove";
+import { IDateInfo } from "../../../interface/date.interface";
 import "./TimeSheet.scss";
 
-export interface Props {
-  dateKey: string;
-}
+export interface Props extends IDateInfo {}
 
 const TimeSheet: React.FC<Props> = (props: Props) => {
-  const { handleMouseDown, handleMouseMove } = useTimeBlockMove(props.dateKey);
+  const { handleMouseDown, handleMouseMove } = useTimeBlockMove({ ...props });
 
   return (
     <ul className="time-sheet">
@@ -16,7 +16,7 @@ const TimeSheet: React.FC<Props> = (props: Props) => {
           className="time-block"
           key={i}
           data-time={(i + 1) / 4 - 0.25}
-          onMouseDown={handleMouseDown}
+          onMouseDown={handleMouseDown.bind(null, uniqueId("schedule_"))}
           onMouseMove={handleMouseMove}
         ></li>
       ))}

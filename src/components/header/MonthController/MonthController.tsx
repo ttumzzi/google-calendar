@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import { currentMonthState, currentYearState } from "../../../recoil/atom";
+import { currentMonthState, currentYearState } from "../../../recoil/date.atom";
 import MoveArrowButtons from "../../common/MoveArrowButtons/MoveArrowButtons";
 import "./MonthController.scss";
 

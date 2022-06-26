@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { ISchedules } from "../interface/interfaces";
+import { ISchedules } from "../interface/date.interface";
 import { getCurrentDate, getCurrentMonth, getCurrentYear } from "../utils/date";
 
 export const currentYearState = atom<number>({

@@ -1,5 +1,5 @@
 import "./DatePicker.scss";
-import { calendarDateListState } from "../../../recoil/selector";
+import { calendarDateListState } from "../../../recoil/date.selector";
 import { useRecoilValue } from "recoil";
 import { getDaysString } from "../../../utils/date";
 import Date from "../../common/Date/Date";
